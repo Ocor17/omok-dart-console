@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:omok_exercise/webClient.dart';
+import 'Board.dart';
+import 'ResponseParser.dart';
 
 class ConsoleUI {
   void showMesseage() {
@@ -62,12 +65,67 @@ class ConsoleUI {
   }
 
   dynamic promptPlayer() {
-    stdout.write('\nselect x\n');
-    var x = stdin.readLineSync();
+    var x, y;
 
-    stdout.write('\nselect y\n');
-    var y = stdin.readLineSync();
+    while (true) {
+      try {
+        stdout.write('\nselect x:\n');
+        var xIn = stdin.readLineSync();
+        x = int.parse(xIn);
+        stdout.write('\nselect y:\n');
+        var yIn = stdin.readLineSync();
+        y = int.parse(yIn);
+
+        if (x < 1 || x > 15 || y < 1 || y > 15) {
+          //edit to use size of board!!!!!!!
+          throw FormatException('index out of bounds for game!');
+        }
+        break;
+      } on FormatException catch (e) {
+        stdout.write('Error! $e');
+        continue;
+      }
+    }
 
     return {'x': x, 'y': y};
+  }
+
+  void MainMenu() async {
+    var parse = ResponseParser();
+    var web = WebClient();
+
+    //console.drawBoard(board.getCurrentBoard());
+    print('\u23FA');
+
+    showMesseage();
+
+    var url = promptServer();
+
+    var gameInfo = parse.parseInfo(await web.getInfo(url));
+
+    var board = Board(gameInfo['size']);
+
+    var strat =
+        promptStrategy(gameInfo['strategy']); //var gets set for future use
+
+    var newGamePid = parse.parseNew(await web.getNew(url, strat));
+
+    var i = 0;
+    while (i < 5) {
+      var move = promptPlayer();
+
+      var playing = parse
+          .parsePlay(await web.getPlay(url, move['x'], move['y'], newGamePid));
+
+      //board.isWin(playing['player']['isWin'], playing['player']['row'], true);
+      //board.isWin(playing['player']['isWin'], playing['player']['row'], false);
+
+      board.placeToken(playing['player']['x'], playing['player']['y'], true);
+      board.placeToken(
+          playing['computer']['x'], playing['computer']['y'], false);
+
+      drawBoard(board.getCurrentBoard());
+      i++;
+    }
   }
 }

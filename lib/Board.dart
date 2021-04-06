@@ -31,18 +31,18 @@ class Board {
     return this.size;
   }
 
-  dynamic isWin(win, row, isPlayer) {
+  dynamic isWin(win) {
     if (win) {
-      if (isPlayer) {
-        for (var i = 0; i < row.length / 2; i++) {}
-      }
+      return true;
     }
+    return false;
   }
 
-  void isDraw(draw) {
+  dynamic isDraw(draw) {
     if (draw) {
       stdout.write('Draw!');
-      exit(0);
+      return true;
     }
+    return false;
   }
 }

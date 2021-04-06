@@ -5,7 +5,12 @@ import 'package:omok_exercise/ConsoleUI.dart';
 import '../lib/ResponseParser.dart';
 import '../lib/webClient.dart';
 
-void main() async {
+void main() {
+  var console = ConsoleUI();
+
+  console.MainMenu();
+
+  /** 
   var parse = ResponseParser();
   var web = WebClient();
   var console = ConsoleUI();
@@ -33,8 +38,8 @@ void main() async {
     var playing = parse
         .parsePlay(await web.getPlay(url, move['x'], move['y'], newGamePid));
 
-    board.isWin(playing['player']['isWin'], playing['player']['row'], true);
-    board.isWin(playing['player']['isWin'], playing['player']['row'], false);
+    //board.isWin(playing['player']['isWin'], playing['player']['row'], true);
+    //board.isWin(playing['player']['isWin'], playing['player']['row'], false);
 
     board.placeToken(playing['player']['x'], playing['player']['y'], true);
     board.placeToken(playing['computer']['x'], playing['computer']['y'], false);
@@ -42,7 +47,7 @@ void main() async {
     console.drawBoard(board.getCurrentBoard());
     i++;
   }
-
+**/
   //print(playing);
 
   //print(newGamePid);
