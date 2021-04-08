@@ -1,28 +1,27 @@
-import 'dart:io';
-import 'dart:math';
 import 'package:http/http.dart' as http;
+import 'dart:io';
+import 'responseParser.dart';
 
-class WebClient {
-  Future<String> getInfo(url) async {
-    stdout.write('Obtaining server information ....\n');
-
-    var response = await http.get('$url/info');
-    var info = (response.body);
-    //print(info);
-
-    return info;
+class WebClient{
+  Future httpResponse(url) async{
+    var response = await http.get(url);
+    return response;
   }
 
   Future<String> getNew(url, strategy) async {
+    var rp = ResponseParser();
     stdout.write('Creating new game...\n');
-    var response = await http.get('$url/new?strategy=$strategy');
+    var newURl = rp.parseToURL(url + '/new?strategy=' + strategy);
+    var response = await http.get(newURl);
     var newGame = response.body;
 
     return newGame;
   }
 
   Future<String> getPlay(url, x, y, pid) async {
-    var response = await http.get('$url/play?pid=$pid&move=$x,$y');
+    var rp = ResponseParser();
+    var newURl = rp.parseToURL(url + '/play?pid=' + pid + '&move=' + x.toString() + ',' + y.toString());
+    var response = await http.get(newURl);
 
     var play = response.body;
 
