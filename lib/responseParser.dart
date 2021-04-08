@@ -1,32 +1,33 @@
 import 'dart:convert';
 
-class ResponseParser{
+import 'dart:io';
 
-  Uri parseToURL(input){
+class ResponseParser {
+  Uri parseToURL(input) {
     var url = Uri.parse(input);
     return url;
   }
 
-  List getServerStrategies(response){
+  List getServerStrategies(response) {
     var info = json.decode(response.body);
     var values = info.values.toList();
     var strategies = values[1];
     return strategies;
   }
 
-  int getBoardSize(response){
+  int getBoardSize(response) {
     var info = json.decode(response.body);
     var values = info.values.toList();
     var size = values[0];
     return size;
   }
 
-  int parseToInteger(line){
+  int parseToInteger(line) {
     var selection = 0;
-    try{
+    try {
       selection = int.parse(line);
-    }on FormatException{
-      print('Format Exception when parsing to integer');
+    } on FormatException {
+      stdout.write('Format Exception when parsing to integer');
     }
     return selection;
   }

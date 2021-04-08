@@ -2,8 +2,8 @@ import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'responseParser.dart';
 
-class WebClient{
-  Future httpResponse(url) async{
+class WebClient {
+  Future httpResponse(url) async {
     var response = await http.get(url);
     return response;
   }
@@ -20,7 +20,13 @@ class WebClient{
 
   Future<String> getPlay(url, x, y, pid) async {
     var rp = ResponseParser();
-    var newURl = rp.parseToURL(url + '/play?pid=' + pid + '&move=' + x.toString() + ',' + y.toString());
+    var newURl = rp.parseToURL(url +
+        '/play?pid=' +
+        pid +
+        '&move=' +
+        x.toString() +
+        ',' +
+        y.toString());
     var response = await http.get(newURl);
 
     var play = response.body;
