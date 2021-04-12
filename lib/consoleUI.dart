@@ -2,12 +2,12 @@ import 'dart:io';
 import 'responseParser.dart';
 import 'Board.dart';
 
-class ConsoleUI{
+class ConsoleUI {
   ///This gets the server URL
-  String askForServerURL(){
+  String askForServerURL() {
     ///This is the default URL to use if user doesn't enter one
     var defaultUrl = 'http://www.cs.utep.edu/cheon/cs3360/project/omok/info/';
-    stdout.write('Enter the server URL [default: $defaultUrl] ');
+    stdout.write('Enter the server URL [default: $defaultUrl] \n');
     var url = getInput();
     if (url == '') {
       ///check for empty string
@@ -15,15 +15,18 @@ class ConsoleUI{
     }
     return url;
   }
+
   ///This gets user input
-  String getInput(){
+  String getInput() {
     var input = stdin.readLineSync();
     return input;
   }
+
   ///This gets the server strategy choice from the user
-  String askForStrategy(){
+  String askForStrategy() {
     var defaultStrat = '1';
-    stdout.write('Select the server strategy, 1. Smart 2. Random [default: 1]');
+    stdout
+        .write('Select the server strategy, 1. Smart 2. Random [default: 1]\n');
     var line = getInput();
     if (line != '1' || line != '2') {
       //check for empty string
@@ -31,14 +34,16 @@ class ConsoleUI{
     }
     return line;
   }
+
   ///This gets the users choice on where to place a stone
-  String askForMove(){
-    stdout.write('Enter x and y (8 10, e.g., 6 5)');
+  String askForMove() {
+    stdout.write('Enter x and y (8 10, e.g., 6 5)\n');
     var line = getInput();
     return line;
   }
+
   ///This is the overall loop to check for invalid inputs when getting player move
-  dynamic promptMove(Board b){
+  dynamic promptMove(Board b) {
     var rp = ResponseParser();
     var size = b.size;
 
@@ -47,67 +52,65 @@ class ConsoleUI{
     var x = rp.parseToInteger(moves[1]);
     var y = rp.parseToInteger(moves[0]);
 
-    while(true){
+    while (true) {
       ///checks for choices outside the size of the board
-      if(x > size || y > size){
-        stdout.write('Invalid Indices');
+      if (x > size || y > size) {
+        stdout.write('Invalid Indices\n');
         input = askForMove();
         moves = input.split(' ');
         try {
           x = rp.parseToInteger(moves[1]);
           y = rp.parseToInteger(moves[0]);
-        }on FormatException{
-          stdout.write('Format Exception');
+        } on FormatException {
+          stdout.write('Format Exception\n');
           continue;
-        }
-        on RangeError{
+        } on RangeError {
           continue;
         }
         continue;
       }
+
       ///This tries to place the token and if it returns false it means the space is taken
-      else if(b.placeToken(x, y, true)){
+      else if (b.placeToken(x, y, true)) {
         break;
       }
+
       ///This is if the placement returns false then the space is not empty
-      else if(!b.placeToken(x, y, true)){
-        stdout.write('Not empty!');
+      else if (!b.placeToken(x, y, true)) {
+        stdout.write('Not empty!\n');
         input = askForMove();
         moves = input.split(' ');
         try {
           x = rp.parseToInteger(moves[1]);
           y = rp.parseToInteger(moves[0]);
-        }on FormatException{
-          stdout.write('Format Exception');
+        } on FormatException {
+          stdout.write('Format Exception\n');
           continue;
-        }
-        on RangeError{
+        } on RangeError {
           continue;
         }
         continue;
-      }
-      else{
-        stdout.write('Entered wrong data');
+      } else {
+        stdout.write('Entered wrong data\n');
         input = askForMove();
         moves = input.split(' ');
         try {
           x = rp.parseToInteger(moves[1]);
           y = rp.parseToInteger(moves[0]);
-        }on FormatException{
-          stdout.write('Format Exception');
+        } on FormatException {
+          stdout.write('Format Exception\n');
           continue;
-        }
-        on RangeError{
+        } on RangeError {
           continue;
         }
         continue;
       }
     }
-    return [x,y];
+    return [x, y];
   }
 
   ///This gets the strategy calls to get the user input and makes sure the input is valid
-  String getChosenStrategy(List strategies){
+  String getChosenStrategy(List strategies) {
     var rp = ResponseParser();
     var smart = strategies[0];
     var random = strategies[1];
@@ -115,34 +118,33 @@ class ConsoleUI{
 
     try {
       var selection = rp.parseToInteger(line);
-      if (selection == 1){
-        stdout.write('Selected strategy: $smart');
+      if (selection == 1) {
+        stdout.write('Selected strategy: $smart\n');
         return smart;
-      }
-      else if(selection == 2){
-        stdout.write('Selected strategy: $random');
+      } else if (selection == 2) {
+        stdout.write('Selected strategy: $random\n');
         return random;
+      } else {
+        stdout.write('Invalid Selection: $selection\n');
       }
-      else{
-        stdout.write('Invalid Selection: $selection');
-      }
+
       ///This will loop until a valid input is given
-      while (selection != 1 && selection != 2){
+      while (selection != 1 && selection != 2) {
         line = askForStrategy();
         selection = rp.parseToInteger(line);
-        if (selection == 1){
-          stdout.write('Selected strategy: $smart');
+        if (selection == 1) {
+          stdout.write('Selected strategy: $smart\n');
           return smart;
-        }
-        else if(selection == 2){
-          stdout.write('Selected strategy: $random');
+        } else if (selection == 2) {
+          stdout.write('Selected strategy: $random\n');
           return random;
-        }
-        else{
-          stdout.write('Invalid Selection: $selection');
+        } else {
+          stdout.write('Invalid Selection: $selection\n');
         }
       }
-    } on FormatException { stdout.write('invalid format'); }
+    } on FormatException {
+      stdout.write('invalid format\n');
+    }
     return random;
   }
 
