@@ -1,37 +1,42 @@
 import 'dart:convert';
-
 import 'dart:io';
 
-class ResponseParser {
-  Uri parseToURL(input) {
+class ResponseParser{
+
+  ///This will parse the string given to URL
+  Uri parseToURL(input){
     var url = Uri.parse(input);
     return url;
   }
 
-  List getServerStrategies(response) {
+  ///This will parse the server strategy response from the webclient to a list to be used
+  List getServerStrategies(response){
     var info = json.decode(response.body);
     var values = info.values.toList();
     var strategies = values[1];
     return strategies;
   }
 
-  int getBoardSize(response) {
+  ///This gets the board size from the response and returns a list
+  int getBoardSize(response){
     var info = json.decode(response.body);
     var values = info.values.toList();
     var size = values[0];
     return size;
   }
 
-  int parseToInteger(line) {
+  ///This parses strings to integers and checks if the format doesnt fit
+  int parseToInteger(line){
     var selection = 0;
-    try {
+    try{
       selection = int.parse(line);
-    } on FormatException {
+    }on FormatException{
       stdout.write('Format Exception when parsing to integer');
     }
     return selection;
   }
 
+  ///This parses the response from the getNew in webClient to get the new game PID
   dynamic parseNew(response) {
     var newGame = json.decode(response);
     var status = newGame['response'];
@@ -46,6 +51,7 @@ class ResponseParser {
     return serverResponse;
   }
 
+  ///This parses the response from getPlay in webClient to get the conditions for win and draw and the computer move
   dynamic parsePlay(response) {
     var play = json.decode(response);
     var serverResponse = play['response']; //server response: true or false
